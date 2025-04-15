@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Meu App",
-  description: "Descrição do meu aplicativo",
+  title: "Avaliador Apostou",
+  description: "Aplicação para avaliação e sugestões de melhorias",
 };
 
 export default function RootLayout({

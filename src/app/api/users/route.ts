@@ -11,8 +11,12 @@ export async function POST(req: Request) {
     const body = await req.json();
     const parsed = createUserDto.parse(body);
 
-    const user = await createUser(parsed);
+    // Se o email estiver vazio, definimos como null
+    if (parsed.email === "") {
+      parsed.email = null;
+    }
 
+    const user = await createUser(parsed);
     const userMapped = userMapper.parse(user);
 
     return NextResponse.json(userMapped, { status: 200 });
@@ -28,19 +32,7 @@ export async function POST(req: Request) {
       }));
       status = 400;
     } else if (isPostgresError(error)) {
-      switch (error.code) {
-        case "23505": {
-          status = 409; // conflict
-          const key = error.constraint_name?.split("_")[1] || "";
-          message = [
-            {
-              message: `${key} was already registered`,
-              code: "23505",
-              column: [key],
-            },
-          ];
-        }
-      }
+      // Removido o bloco que tratava o erro 23505 de conflito de unicidade
     } else message = [error.message];
 
     return NextResponse.json({ errors: message }, { status });
@@ -74,19 +66,7 @@ export async function GET(req: Request) {
       }));
       status = 400;
     } else if (isPostgresError(error)) {
-      switch (error.code) {
-        case "23505": {
-          status = 409; // conflict
-          const key = error.constraint_name?.split("_")[1] || "";
-          message = [
-            {
-              message: `${key} was already registered`,
-              code: "23505",
-              column: [key],
-            },
-          ];
-        }
-      }
+      // Removido o bloco que tratava o erro 23505 de conflito de unicidade
     } else message = [error.message];
 
     return NextResponse.json({ errors: message }, { status });

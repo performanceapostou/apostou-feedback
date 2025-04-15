@@ -15,7 +15,12 @@ import { useRouter } from "next/navigation";
 
 const registrationSchema = z.object({
   name: z.string().min(3, "O nome é obrigatório."),
-  email: z.string().email("Digite um email válido."),
+  email: z
+    .string()
+    .email("Digite um email válido.")
+    .or(z.literal("")) // Permite que o campo seja vazio
+    .optional() // Torna o campo opcional
+    .nullable(),
   phone: z
     .string()
     .min(10, "O número deve ter pelo menos 10 dígitos.")
@@ -82,6 +87,10 @@ const Registration: React.FC = () => {
   });
 
   const onSubmit = (data: RegistrationFormData) => {
+    // Se o email for vazio, definir como null antes de enviar ao backend
+    if (data.email === "") {
+      data.email = null;
+    }
     mutation.mutate(data);
   };
 
@@ -103,7 +112,7 @@ const Registration: React.FC = () => {
                 id="name"
                 type="text"
                 {...register("name")}
-                placeholder="Digite seu nome e sobrenome"
+                placeholder="Digite seu nome e sobrenome (obrigatório)"
               />
             </StyledInputWrapper>
             {errors.name && <StyledError>{errors.name.message}</StyledError>}
@@ -117,7 +126,7 @@ const Registration: React.FC = () => {
                 id="phone"
                 type="text"
                 {...register("phone")}
-                placeholder="Digite seu número"
+                placeholder="Digite seu número (obrigatório)"
               />
             </StyledInputWrapper>
             {errors.phone && <StyledError>{errors.phone.message}</StyledError>}
@@ -131,7 +140,7 @@ const Registration: React.FC = () => {
                 id="email"
                 type="text"
                 {...register("email")}
-                placeholder="jhon@example.com"
+                placeholder="jhon@example.com (opcional)"
               />
             </StyledInputWrapper>
             {errors.email && <StyledError>{errors.email.message}</StyledError>}

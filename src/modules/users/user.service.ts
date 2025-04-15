@@ -4,14 +4,6 @@ import { CreateUserInput, GetAllUsersPayload } from "./user.dto";
 import { and, ilike } from "drizzle-orm";
 
 export async function createUser(data: CreateUserInput) {
-  const existing = await db.query.User.findFirst({
-    where: (u, { eq }) => eq(u.email, data.email),
-  });
-
-  if (existing) {
-    throw new Error("Usuário já existe com este Email");
-  }
-
   const [inserted] = await db.insert(User).values(data).returning();
   return inserted;
 }
