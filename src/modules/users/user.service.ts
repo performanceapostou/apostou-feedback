@@ -20,6 +20,15 @@ export async function getAllUsers(query: GetAllUsersPayload) {
     }
   }
 
+  // Filtro por bairro (busca parcial)
+  if (query.district.length > 0) {
+    const districts = query.district;
+
+    for (const district of districts) {
+      conditions.push(ilike(User.district, `%${district}%`));
+    }
+  }
+
   // Filtro por nome (busca parcial)
   if (query.name.length > 0) {
     const names = query.name;

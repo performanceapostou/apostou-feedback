@@ -16,6 +16,7 @@ export const User = pgTable("User", {
     .notNull(),
   name: text("name").notNull().unique(),
   email: text("email"),
+  district: text("district"),
   phone: text("phone").notNull().unique(),
   createdAt: timestamp("created_at", {
     withTimezone: true,

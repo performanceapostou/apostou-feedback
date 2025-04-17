@@ -12,9 +12,9 @@ export async function POST(req: Request) {
     const parsed = createUserDto.parse(body);
 
     // Se o email estiver vazio, definimos como null
-    if (parsed.email === "") {
-      parsed.email = null;
-    }
+    // if (parsed.email === "") {
+    //   parsed.email = null;
+    // }
 
     const user = await createUser(parsed);
     const userMapped = userMapper.parse(user);
@@ -45,9 +45,10 @@ export async function GET(req: Request) {
 
     const name = queryParams.getAll("name");
     const email = queryParams.getAll("email");
+    const district = queryParams.getAll("district");
     const phone = queryParams.getAll("phone");
 
-    const users = await getAllUsers({ name, email, phone });
+    const users = await getAllUsers({ name, email, district, phone });
 
     const usersMapped = userMapper.array().parse(users);
 

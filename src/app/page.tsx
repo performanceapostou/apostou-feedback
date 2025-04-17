@@ -15,12 +15,7 @@ import { useRouter } from "next/navigation";
 
 const registrationSchema = z.object({
   name: z.string().min(3, "O nome é obrigatório."),
-  email: z
-    .string()
-    .email("Digite um email válido.")
-    .or(z.literal("")) // Permite que o campo seja vazio
-    .optional() // Torna o campo opcional
-    .nullable(),
+  district: z.string().min(3, "O bairro é obrigatório."),
   phone: z
     .string()
     .min(10, "O número deve ter pelo menos 10 dígitos.")
@@ -88,9 +83,9 @@ const Registration: React.FC = () => {
 
   const onSubmit = (data: RegistrationFormData) => {
     // Se o email for vazio, definir como null antes de enviar ao backend
-    if (data.email === "") {
-      data.email = null;
-    }
+    // if (data.email === "") {
+    //   data.email = null;
+    // }
     mutation.mutate(data);
   };
 
@@ -133,17 +128,17 @@ const Registration: React.FC = () => {
           </div>
 
           <div>
-            <StyledLabel htmlFor="email">Email</StyledLabel>
+            <StyledLabel htmlFor="district">Bairro</StyledLabel>
             <StyledInputWrapper>
-              <img src="/icons/mail.png" alt="mail" />
+              <img src="/icons/loc.png" alt="loc" />
               <input
-                id="email"
+                id="district"
                 type="text"
-                {...register("email")}
-                placeholder="jhon@example.com (opcional)"
+                {...register("district")}
+                placeholder="Digite seu bairro (obrigatório)"
               />
             </StyledInputWrapper>
-            {errors.email && <StyledError>{errors.email.message}</StyledError>}
+            {errors.district && <StyledError>{errors.district.message}</StyledError>}
           </div>
 
           <StyledButton type="submit" disabled={mutation.status === "pending"}>

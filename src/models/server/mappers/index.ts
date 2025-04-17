@@ -5,6 +5,7 @@ export const userMapper = z.object({
   name: z.string(),
   phone: z.string(),
   email: z.string().optional().nullable(),
+  district: z.string().nullable(),
 });
 
 export const questionMapper = z.object({
